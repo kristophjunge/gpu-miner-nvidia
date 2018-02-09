@@ -1,0 +1,23 @@
+version: '3'
+services:
+  ethminer:
+    container_name: ethminer
+    image: kristophjunge/ethminer-cuda
+    restart: always
+    environment:
+      STARTUP_DELAY: "${ETHMINER_STARTUP_DELAY}"
+      USERPASS: "${ETHMINER_USERPASS}.${MINER_NAME}"
+      STRATUM: "${ETHMINER_STRATUM}"
+      FAILOVER_STRATUM: "${ETHMINER_FAILOVER_STRATUM}"
+    volumes:
+      - "/var/log/gpu-miner-nvidia/ethminer.log:/var/log/ethminer.log"
+  prometheus_ethminer:
+    container_name: prometheus_ethminer
+    image: kristophjunge/prometheus-ethminer
+    restart: always
+    environment:
+      MINER_ID: "${MINER_NAME}"
+    ports:
+      - "9201:9201"
+    volumes:
+      - "/var/log/gpu-miner-nvidia/ethminer.log:/var/log/ethminer.log"

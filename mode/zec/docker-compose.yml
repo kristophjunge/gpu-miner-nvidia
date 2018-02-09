@@ -1,0 +1,23 @@
+version: '3'
+services:
+  ewbf:
+    container_name: ewbf
+    image: kristophjunge/ewbf
+    restart: always
+    environment:
+      STARTUP_DELAY: "${EWBF_STARTUP_DELAY}"
+      SERVER: "${EWBF_SERVER}"
+      ADDRESS: "${EWBF_ADDRESS}"
+      WORKER: "${MINER_NAME}"
+      PASS: "${EWBF_PASS}"
+      PORT: "${EWBF_PORT}"
+  prometheus_ewbf:
+    container_name: prometheus_ewbf
+    image: kristophjunge/prometheus-ewbf
+    restart: always
+    environment:
+      TEST_MODE: 0
+      API_URL: "http://ewbf:42000/getstat"
+      MINER_ID: "${MINER_NAME}"
+    ports:
+      - "9207:9207"

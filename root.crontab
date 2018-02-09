@@ -1,0 +1,4 @@
+# Wipe log files
+0 12,0 * * * /bin/rm -rf /var/log/gpu-miner-nvidia/*
+# Daily reboot
+0 8 * * * /opt/gpu-miner-nvidia/script/reboot.sh >> /var/log/gpu-miner-nvidia/gpu-miner-nvidia.log 2>&1

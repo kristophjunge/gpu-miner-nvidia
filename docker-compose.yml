@@ -1,0 +1,21 @@
+version: '3'
+services:
+  prometheus_node:
+    container_name: prometheus_node
+    image: quay.io/prometheus/node-exporter:v0.14.0
+    restart: always
+    #ports:
+    #  - "9100:9100"
+    volumes:
+      - "/proc:/host/proc"
+      - "/sys:/host/sys"
+      - "/:/rootfs"
+    network_mode: host # Needed to read network statistics
+    command: "--collector.procfs /host/proc --collector.sysfs /host/sys --collector.filesystem.ignored-mount-points '^/(sys|proc|dev|host|etc)($$|/)'"
+    #--collectors.enabled filesystem,hwmon,meminfo,vmstat
+  prometheus_nvidiasmi:
+    container_name: prometheus_nvidiasmi
+    image: kristophjunge/prometheus-nvidiasmi
+    restart: always
+    ports:
+      - "9202:9202"

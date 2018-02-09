@@ -1,0 +1,14 @@
+[Unit]
+Description=GPU Miner Nvidia
+Requires=docker.service
+After=docker.service
+
+[Service]
+Restart=always
+Type=simple
+WorkingDirectory=/opt/gpu-miner-nvidia
+ExecStart=./script/start.sh >> /var/log/gpu-miner-nvidia.log 2>&1
+ExecStop=./script/stop.sh >> /var/log/gpu-miner-nvidia.log 2>&1
+
+[Install]
+WantedBy=default.target
