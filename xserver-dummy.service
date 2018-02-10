@@ -1,0 +1,12 @@
+[Unit]
+Description=XServer Dummy
+
+[Service]
+Restart=always
+Type=simple
+WorkingDirectory=/root
+ExecStart=/usr/bin/startx
+ExecStop=
+
+[Install]
+WantedBy=default.target

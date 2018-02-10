@@ -7,8 +7,8 @@ After=docker.service
 Restart=always
 Type=simple
 WorkingDirectory=/opt/gpu-miner-nvidia
-ExecStart=./script/start.sh >> /var/log/gpu-miner-nvidia.log 2>&1
-ExecStop=./script/stop.sh >> /var/log/gpu-miner-nvidia.log 2>&1
+ExecStart=/bin/bash -c '/opt/gpu-miner-nvidia/script/start.sh >> /var/log/gpu-miner-nvidia/gpu-miner-nvidia.log 2>&1'
+ExecStop=/bin/bash -c '/opt/gpu-miner-nvidia/script/stop.sh >> /var/log/gpu-miner-nvidia/gpu-miner-nvidia.log 2>&1'
 
 [Install]
 WantedBy=default.target

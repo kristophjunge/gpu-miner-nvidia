@@ -1,4 +1,4 @@
-version: '3'
+version: '2'
 services:
   ethminer:
     container_name: ethminer
@@ -6,7 +6,7 @@ services:
     restart: always
     environment:
       STARTUP_DELAY: "${ETHMINER_STARTUP_DELAY}"
-      USERPASS: "${ETHMINER_USERPASS}.${MINER_NAME}"
+      USERPASS: "${ETHMINER_USERPASS}.${GPUMINERNVIDIA_NAME}"
       STRATUM: "${ETHMINER_STRATUM}"
       FAILOVER_STRATUM: "${ETHMINER_FAILOVER_STRATUM}"
     volumes:
@@ -16,7 +16,7 @@ services:
     image: kristophjunge/prometheus-ethminer
     restart: always
     environment:
-      MINER_ID: "${MINER_NAME}"
+      MINER_ID: "${GPUMINERNVIDIA_NAME}"
     ports:
       - "9201:9201"
     volumes:

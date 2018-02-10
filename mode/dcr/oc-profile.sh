@@ -1,4 +1,0 @@
-#!/bin/bash
-MEMORY_CLOCK=0
-CPU_CLOCK=0
-POWER_LIMIT=0

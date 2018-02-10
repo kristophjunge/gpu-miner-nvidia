@@ -18,5 +18,5 @@ ${SCRIPT_DIR}/stop.sh
 echo "`date` Waiting ${GPUMINERNVIDIA_SHUTDOWN_DELAY}s before shutdown"
 sleep ${GPUMINERNVIDIA_SHUTDOWN_DELAY}
 
-echo "`date` Rebooting"
-/sbin/reboot
+echo "`date` Shutdown"
+/sbin/shutdown

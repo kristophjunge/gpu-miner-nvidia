@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 TARGET_HOST=${TARGET_HOST:="gpuminernvidia1"}
 
 echo "Committing local changes..."

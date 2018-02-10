@@ -10,27 +10,24 @@ if [ ! -f ${ENV_FILE} ]; then
 fi
 source ${ENV_FILE}
 
-export DISPLAY=:0
-export XAUTHORITY=/var/run/lightdm/root/:0
-
-echo "`date` Starting"
-
-# Connect to VPN
-
-if [ -n "${VPN_ID}" ]; then
-    echo "`date` Connect to VPN"
-    #nmcli con up id ${VPN_ID}
-fi
+echo "`date` Starting in mode '${GPUMINERNVIDIA_MODE}'"
 
 # GPU Setup
 
+export DISPLAY=:0
+export XAUTHORITY=~/.Xauthority
+export LC_ALL="en_US.utf-8"
+
 echo "`date` Configure xserver"
-sudo nvidia-xconfig --enable-all-gpus --cool-bits=28 --allow-empty-initial-configuration
+nvidia-xconfig --enable-all-gpus --cool-bits=28 --allow-empty-initial-configuration
 # @TODO Restart xserver
+
+# Enable persistence mode
+nvidia-smi --persistence-mode=1
 
 if [ ! -z "${GPUMINERNVIDIA_MODE}" ]; then
 
-    OC_PROFILE_CONFIG=${SCRIPT_DIR}/mode/${GPUMINERNVIDIA_MODE}/oc-profile.sh
+    OC_PROFILE_CONFIG=${SCRIPT_DIR}/../mode/${GPUMINERNVIDIA_MODE}/oc-profile
 
     if [ ! -f ${OC_PROFILE_CONFIG} ]; then
 
@@ -38,25 +35,22 @@ if [ ! -z "${GPUMINERNVIDIA_MODE}" ]; then
 
     else
 
-        echo "`date` Waiting ${OC_DELAY}s before applying OC"
-        sleep ${OC_DELAY}
+        echo "`date` Waiting ${GPUMINERNVIDIA_OC_DELAY}s before applying OC"
+        sleep ${GPUMINERNVIDIA_OC_DELAY}
 
-        echo "`date` Applying OC"
-
-        MEMORY_CLOCK=0
-        CPU_CLOCK=0
+        MEMORY_CLOCK_OFFSET=0
+        CPU_CLOCK_OFFSET=0
         POWER_LIMIT=0
 
         source ${OC_PROFILE_CONFIG}
 
+        echo "`date` Applying OC (Memory Clock Offset: ${MEMORY_CLOCK_OFFSET}, CPU Clock Offset: ${CPU_CLOCK_OFFSET}, Power Limit: ${POWER_LIMIT})"
+
         nvidia-smi --query-gpu=index --format=csv,noheader | while read i
         do
-            #/run/user/1000/gdm/Xauthority
-            #DISPLAY=:0 XAUTHORITY=/var/run/lightdm/root/:0 nvidia-settings -a [gpu:0]/GPUFanControlState=1
-            #DISPLAY=:0 XAUTHORITY=/var/run/lightdm/root/:0 nvidia-settings -a [fan:0]/GPUTargetFanSpeed=75
-            nvidia-settings && \
-                --assign "[gpu:${i}]/GPUGraphicsClockOffset[3]=${CPU_CLOCK}" && \
-                --assign "[gpu:${i}]/GPUMemoryTransferRateOffset[3]=${MEMORY_CLOCK}"
+            nvidia-settings \
+                --assign "[gpu:${i}]/GPUGraphicsClockOffset[3]=${CPU_CLOCK_OFFSET}" \
+                --assign "[gpu:${i}]/GPUMemoryTransferRateOffset[3]=${MEMORY_CLOCK_OFFSET}"
             nvidia-smi -i ${i} -pl ${POWER_LIMIT}
         done
 
@@ -64,25 +58,17 @@ if [ ! -z "${GPUMINERNVIDIA_MODE}" ]; then
 
 fi
 
-echo "`date` Waiting ${STARTUP_DELAY}s before starting"
-sleep ${STARTUP_DELAY}
-
 echo "`date` Warm up nvidia-docker"
 docker run --rm nvidia/cuda nvidia-smi
 
-# Start nvidia-docker-compose
-cd ${SCRIPT_DIR}/..
+echo "`date` Waiting ${GPUMINERNVIDIA_STARTUP_DELAY}s before starting"
+sleep ${GPUMINERNVIDIA_STARTUP_DELAY}
 
+# Start docker-compose
 if [ -z "${GPUMINERNVIDIA_MODE}" ]; then
-    docker-compose -f docker-compose.yml up && \
-        --build && \
-        --force-recreate && \
-        --remove-orphans
+    docker-compose -f ${SCRIPT_DIR}/../docker-compose.yml up --build --force-recreate --remove-orphans
 else
-    docker-compose -f docker-compose.yml -f mode/${GPUMINERNVIDIA_MODE}/docker-compose.yml up && \
-        --build && \
-        --force-recreate && \
-        --remove-orphans
+    docker-compose -f ${SCRIPT_DIR}/../docker-compose.yml -f ${SCRIPT_DIR}/../mode/${GPUMINERNVIDIA_MODE}/docker-compose.yml up --build --force-recreate --remove-orphans
 fi
 
 echo "`date` Started"

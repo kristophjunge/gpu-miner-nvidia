@@ -1,12 +1,13 @@
-version: '3'
+version: '2'
 services:
   gominer:
     container_name: gominer
     image: kristophjunge/decred-gominer-cuda
+    restart: always
     environment:
       STARTUP_DELAY: "${GOMINER_STARTUP_DELAY}"
       POOL: "${GOMINER_POOL}"
-      POOLUSER: "${GOMINER_POOLUSER}.${MINER_NAME}"
+      POOLUSER: "${GOMINER_POOLUSER}.${GPUMINERNVIDIA_NAME}"
       POOLPASS: "${GOMINER_POOLPASS}"
       INTENSITY: "${GOMINER_INTENSITY}"
     volumes:
