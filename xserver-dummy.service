@@ -5,7 +5,7 @@ Description=XServer Dummy
 Restart=always
 Type=simple
 WorkingDirectory=/root
-ExecStart=/usr/bin/startx
+ExecStart=/usr/bin/X :0
 ExecStop=
 
 [Install]

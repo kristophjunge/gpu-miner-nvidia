@@ -41,6 +41,7 @@ if [ ! -z "${GPUMINERNVIDIA_MODE}" ]; then
         MEMORY_CLOCK_OFFSET=0
         CPU_CLOCK_OFFSET=0
         POWER_LIMIT=0
+        FAN_SPEED=0
 
         source ${OC_PROFILE_CONFIG}
 
@@ -51,6 +52,13 @@ if [ ! -z "${GPUMINERNVIDIA_MODE}" ]; then
             nvidia-settings \
                 --assign "[gpu:${i}]/GPUGraphicsClockOffset[3]=${CPU_CLOCK_OFFSET}" \
                 --assign "[gpu:${i}]/GPUMemoryTransferRateOffset[3]=${MEMORY_CLOCK_OFFSET}"
+
+            if [ "${FAN_SPEED}" -gt 40 ]; then
+                nvidia-settings \
+                    --assign "[gpu:${i}]/GPUFanControlState=1" \
+                    --assign "[fan:${i}]/GPUTargetFanSpeed=${FAN_SPEED}"
+            fi
+
             nvidia-smi -i ${i} -pl ${POWER_LIMIT}
         done
 

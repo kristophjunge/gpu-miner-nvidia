@@ -4,23 +4,47 @@ set -e
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-sudo apt-get update
-sudo apt-get upgrade
+sudo apt update
+sudo apt upgrade
 
 # Tools
 echo "Install tools"
-sudo apt-get install -y --no-install-recommends build-essential apt-transport-https ca-certificates curl software-properties-common htop
+sudo apt install -y --no-install-recommends build-essential apt-transport-https ca-certificates curl software-properties-common htop dialog
+
+echo "Install minimal xserver"
+# Install x server before Nvidia driver to allow detection of Xorg locations.
+sudo apt install -y --no-install-recommends xorg xserver-xorg-legacy #xserver-xorg-video-dummy
+
+# Disable nouveau driver
+if [ "$(lsmod | grep nouveau | wc -l)" -gt 0 ]; then
+    dialog --yesno "The Nouveau driver is loaded! \n\nDo you want to disable it?" 0 0
+    answer=$?
+    clear
+    if [ ${answer} -eq 0 ]; then
+        echo "Disabling Nouveau driver"
+        sudo bash -c "echo blacklist nouveau > /etc/modprobe.d/blacklist-nvidia-nouveau.conf"
+        sudo bash -c "echo options nouveau modeset=0 >> /etc/modprobe.d/blacklist-nvidia-nouveau.conf"
+        sudo update-initramfs -u
+        echo "The Nouveau driver was disabled! Please reboot and start the script again"
+        exit
+    fi
+fi
 
 # Nvidia driver
-echo "Download Nvidia driver"
-wget -o nvidia.run http://us.download.nvidia.com/XFree86/Linux-x86_64/390.25/NVIDIA-Linux-x86_64-390.25.run
-echo "Install Nvidia driver"
-chmod +x nvidia.run
-./nvidia.run
-
-echo "Install GTK"
-apt install libgtk-3-0
-sudo dpkg-reconfigure locales
+if [ ! "$(which nvidia-settings)" ]; then
+    dialog --yesno "The Nvidia driver is not installed! Do you want to install it?" 0 0
+    answer=$?
+    clear
+    if [ ${answer} -eq 0 ]; then
+        echo "Download Nvidia driver"
+        wget -O nvidia.run http://us.download.nvidia.com/XFree86/Linux-x86_64/390.48/NVIDIA-Linux-x86_64-390.48.run
+        echo "Install Nvidia driver"
+        chmod +x nvidia.run
+        ./nvidia.run
+        echo "The Nvidia driver was installed! Please reboot and start the script again."
+        exit
+    fi
+fi
 
 echo "Setup .bashrc"
 cat << EOF >> ~/.bashrc
@@ -31,46 +55,31 @@ export XAUTHORITY=~/.Xauthority
 export LC_ALL="en_US.utf-8"
 EOF
 
-echo "Set default startup mode to console"
-sudo systemctl set-default multi-user.target
-echo "Install minimal xserver"
-sudo apt install xorg xserver-xorg-legacy xserver-xorg-video-dummy
-echo "Install xserver-dummy service"
-sudo cp ./xserver-dummy.service /etc/systemd/system/xserver-dummy.service
-sudo systemctl daemon-reload
-sudo systemctl enable xserver-dummy.service
-sudo service xserver-dummy start
-
-echo "Install openvpn"
-sudo apt install -y --no-install-recommends openvpn
-#cp openvpn.conf /etc/openvpn/openvpn.conf
-
 echo "Remove previous docker installations"
-sudo apt-get remove --purge -y docker docker-engine docker.io
+sudo apt remove --purge -y docker docker-engine docker.io
 
 echo "Install docker"
-sudo apt-get install -y linux-image-extra-$(uname -r) linux-image-extra-virtual
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-sudo add-apt-repository \
-    "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
-    $(lsb_release -cs) \
-    stable"
-sudo apt-get update
-sudo apt-get install docker-ce docker-compose
-sudo apt-get clean
-sudo groupadd -f docker
-sudo usermod -aG docker ${USER}
+# Install ubuntu version to be compatible with nvidia-docker
+sudo apt install -y --no-install-recommends docker.io
+sudo systemctl enable docker
+sudo systemctl start docker
+
+echo "Install docker-compose"
+sudo curl -L https://github.com/docker/compose/releases/download/1.21.0/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
 
 echo "Install nvidia-docker"
-# If you have nvidia-docker 1.0 installed: we need to remove it and all existing GPU containers
 docker volume ls -q -f driver=nvidia-docker | xargs -r -I{} -n1 docker ps -q -a -f volume={} | xargs -r docker rm -f
-sudo apt-get purge -y nvidia-docker
+sudo apt purge -y nvidia-docker
 # Add the package repositories
-curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add -
-curl -s -L https://nvidia.github.io/nvidia-docker/ubuntu16.04/amd64/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list
-sudo apt-get update
+curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | \
+  sudo apt-key add -
+distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
+curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | \
+  sudo tee /etc/apt/sources.list.d/nvidia-docker.list
+sudo apt update
 # Install nvidia-docker2 and reload the Docker daemon configuration
-sudo apt-get install -y nvidia-docker2
+sudo apt install -y --no-install-recommends nvidia-docker2
 sudo pkill -SIGHUP dockerd
 
 echo "Configure nvidia-docker"
@@ -85,15 +94,18 @@ cat << EOF > /etc/docker/daemon.json
     }
 }
 EOF
-echo "Warm up nvidia-docker"
-docker run --rm nvidia/cuda nvidia-smi
 
 echo "Configure xserver"
 sudo nvidia-xconfig --enable-all-gpus --cool-bits=28 --allow-empty-initial-configuration
 
-echo "Install gpu-miner-nvidia service"
-sudo cp ./gpu-miner-nvidia.service /etc/systemd/system/gpu-miner-nvidia.service
+echo "Configure xserver-dummy service"
+sudo cp ./xserver-dummy.service /etc/systemd/system/xserver-dummy.service
 sudo systemctl daemon-reload
+sudo systemctl enable xserver-dummy.service
+sudo service xserver-dummy start
+
+echo "Warm up nvidia-docker"
+docker run --rm nvidia/cuda nvidia-smi
 
 echo "Setup log files"
 sudo mkdir -p /var/log/gpu-miner-nvidia/gominer
@@ -104,3 +116,10 @@ sudo touch /var/log/gpu-miner-nvidia/gpu-miner-nvidia.log \
 
 echo "Install cronjobs"
 crontab ${SCRIPT_DIR}/../root.crontab
+
+echo "Install gpu-miner-nvidia service"
+sudo cp ./gpu-miner-nvidia.service /etc/systemd/system/gpu-miner-nvidia.service
+sudo systemctl daemon-reload
+sudo systemctl enable gpu-miner-nvidia.service
+
+echo "Setup completed! Configure .env file and reboot to start mining."

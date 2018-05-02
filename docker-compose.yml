@@ -1,9 +1,9 @@
-version: '2'
+version: '3'
 services:
   prometheus_node:
     container_name: prometheus_node
     image: quay.io/prometheus/node-exporter:v0.14.0
-    restart: always
+    restart: unless-stopped
     #ports:
     #  - "9100:9100"
     volumes:
@@ -16,6 +16,6 @@ services:
   prometheus_nvidiasmi:
     container_name: prometheus_nvidiasmi
     image: kristophjunge/prometheus-nvidiasmi
-    restart: always
+    restart: unless-stopped
     ports:
       - "9202:9202"

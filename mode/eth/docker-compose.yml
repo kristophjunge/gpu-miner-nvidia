@@ -1,9 +1,9 @@
-version: '2'
+version: '3'
 services:
   ethminer:
     container_name: ethminer
     image: kristophjunge/ethminer-cuda
-    restart: always
+    restart: unless-stopped
     environment:
       STARTUP_DELAY: "${ETHMINER_STARTUP_DELAY}"
       USERPASS: "${ETHMINER_USERPASS}.${GPUMINERNVIDIA_NAME}"
@@ -14,10 +14,10 @@ services:
   prometheus_ethminer:
     container_name: prometheus_ethminer
     image: kristophjunge/prometheus-ethminer
-    restart: always
+    restart: unless-stopped
     environment:
+      TEST_MODE: 0
+      API_URL: "ethminer:3333"
       MINER_ID: "${GPUMINERNVIDIA_NAME}"
     ports:
       - "9201:9201"
-    volumes:
-      - "/var/log/gpu-miner-nvidia/ethminer.log:/var/log/ethminer.log"

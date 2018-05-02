@@ -4,7 +4,7 @@
 
 ![Nvidia](https://raw.githubusercontent.com/kristophjunge/gpu-miner-nvidia/master/nvidia_logo.png)
 
-Nvidia GPU mining node setup for headless [Ubuntu Server](https://www.ubuntu.com/). Docker based using [nvidia-docker](https://github.com/NVIDIA/nvidia-docker). Supports ETH, ZEC and DCR mining.
+Nvidia GPU mining node setup for [Ubuntu Server](https://www.ubuntu.com/). Docker based using [nvidia-docker](https://github.com/NVIDIA/nvidia-docker). Supports ETH, ZEC and DCR mining.
 
 Mining is causing environmental issues and will possibly not go away soon. Iam sharing this setup for easy to use energy efficient GPU mining from the software side.
 
@@ -26,11 +26,11 @@ Mining is causing environmental issues and will possibly not go away soon. Iam s
 
 ## Features
 
-- Based on headless [Ubuntu Server](https://www.ubuntu.com/) 16.04.
+- Based on [Ubuntu Server](https://www.ubuntu.com/) 18.04.
 - Minimal x server dummy with xserver-xorg-legacy.
 - Docker based with [nvidia-docker](https://github.com/NVIDIA/nvidia-docker) and [docker-compose](https://docs.docker.com/compose/).
 - Nvidia driver installation.
-- [Genoils Cuda Miner](https://github.com/Genoil/cpp-ethereum.git) for ETH mining.
+- [Improved version](https://github.com/ethereum-mining/ethminer) of Genoils Cuda Miner for ETH mining.
 - [EWBF Miner](https://github.com/nanopool/ewbf-miner) for ZEC mining.
 - [Gominer](https://github.com/decred/gominer) for DCR mining.
 - Overclocking. Prepackaged with overclocking profiles for GTX1070.
@@ -61,7 +61,7 @@ This project orchestrates the following docker containers:
 
 ## Prerequisites
 
-- Ubuntu Server 16.04
+- Ubuntu Server 18.04
 - Git
 
 
