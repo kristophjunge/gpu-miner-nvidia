@@ -10,13 +10,13 @@ if [ ! -f ${ENV_FILE} ]; then
 fi
 source ${ENV_FILE}
 
-echo "`date` Reboot sequence started"
+echo "`date` Shutdown sequence started"
 
 echo "`date` Stopping miner"
-${SCRIPT_DIR}/stop.sh
+service gpu-miner-nvidia stop
 
 echo "`date` Waiting ${GPUMINERNVIDIA_SHUTDOWN_DELAY}s before shutdown"
 sleep ${GPUMINERNVIDIA_SHUTDOWN_DELAY}
 
 echo "`date` Shutdown"
-/sbin/shutdown
+shutdown now

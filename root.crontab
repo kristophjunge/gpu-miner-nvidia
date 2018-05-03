@@ -1,11 +1,11 @@
 # Wipe miner log files daily at 12:00am
-0 12 * * * /opt/gpu-miner-nvidia/script/clear-miner-logs.sh >> /var/log/gpu-miner-nvidia/gpu-miner-nvidia.log 2>&1
+0 12 * * * /bin/bash -c /opt/gpu-miner-nvidia/script/clear-miner-logs.sh >> /var/log/gpu-miner-nvidia/gpu-miner-nvidia.log 2>&1
 
 # Wipe main log file on the first day of the month
 0 0 1 * * /bin/echo "" > /var/log/gpu-miner-nvidia/gpu-miner-nvidia.log 2>&1
 
-# Daily reboot at 7:50am
-50 7 * * * /opt/gpu-miner-nvidia/script/reboot.sh >> /var/log/gpu-miner-nvidia/gpu-miner-nvidia.log 2>&1
+# Daily reboot at 6:50am
+#50 6 * * * /bin/bash -c /opt/gpu-miner-nvidia/script/reboot.sh >> /var/log/gpu-miner-nvidia/gpu-miner-nvidia.log 2>&1
 
-# Daily shutdown at 7:50am
-#50 7 * * * /opt/gpu-miner-nvidia/script/shutdown.sh >> /var/log/gpu-miner-nvidia/gpu-miner-nvidia.log 2>&1
+# Daily shutdown at 6:50am
+50 6 * * * /bin/bash -c /opt/gpu-miner-nvidia/script/shutdown.sh >> /var/log/gpu-miner-nvidia/gpu-miner-nvidia.log 2>&1

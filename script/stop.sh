@@ -13,6 +13,7 @@ source ${ENV_FILE}
 echo "`date` Stopping"
 
 # Stop docker-compose
+cd ${SCRIPT_DIR}/../
 if [ -z "${GPUMINERNVIDIA_MODE}" ]; then
     docker-compose -f ${SCRIPT_DIR}/../docker-compose.yml stop
 else

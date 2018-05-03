@@ -73,6 +73,7 @@ echo "`date` Waiting ${GPUMINERNVIDIA_STARTUP_DELAY}s before starting"
 sleep ${GPUMINERNVIDIA_STARTUP_DELAY}
 
 # Start docker-compose
+cd ${SCRIPT_DIR}/../
 if [ -z "${GPUMINERNVIDIA_MODE}" ]; then
     docker-compose -f ${SCRIPT_DIR}/../docker-compose.yml up --build --force-recreate --remove-orphans
 else
