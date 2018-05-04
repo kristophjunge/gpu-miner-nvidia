@@ -4,7 +4,7 @@
 
 ![Nvidia](https://raw.githubusercontent.com/kristophjunge/gpu-miner-nvidia/master/nvidia_logo.png)
 
-Nvidia GPU mining node setup for [Ubuntu Server](https://www.ubuntu.com/). Docker based using [nvidia-docker](https://github.com/NVIDIA/nvidia-docker). Supports ETH, ZEC and DCR mining.
+Nvidia GPU mining setup for [Ubuntu Server](https://www.ubuntu.com/). Docker based using [nvidia-docker](https://github.com/NVIDIA/nvidia-docker). Supports ETH, ZEC and DCR mining.
 
 Mining is causing environmental issues and will possibly not go away soon. Iam sharing this setup for easy to use energy efficient GPU mining from the software side.
 
