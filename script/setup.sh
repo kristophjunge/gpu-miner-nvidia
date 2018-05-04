@@ -78,9 +78,7 @@ distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
 curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | \
   sudo tee /etc/apt/sources.list.d/nvidia-docker.list
 sudo apt update
-# Install nvidia-docker2 and reload the Docker daemon configuration
 sudo apt install -y --no-install-recommends nvidia-docker2
-sudo pkill -SIGHUP dockerd
 
 echo "Configure nvidia-docker"
 cat << EOF > /etc/docker/daemon.json
@@ -94,6 +92,7 @@ cat << EOF > /etc/docker/daemon.json
     }
 }
 EOF
+sudo pkill -SIGHUP dockerd
 
 echo "Configure xserver"
 sudo nvidia-xconfig --enable-all-gpus --cool-bits=28 --allow-empty-initial-configuration
