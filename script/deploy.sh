@@ -99,6 +99,7 @@ ssh ${TARGET_HOST} /bin/bash << EOF
     echo
 
     echo "Extracting files..."
+    mkdir -p ${TARGET_DIR}
     tar -xzf /tmp/${ARCHIVE_NAME} -C ${TARGET_DIR}
     rm /tmp/${ARCHIVE_NAME}
     echo
