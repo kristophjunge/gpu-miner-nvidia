@@ -12,7 +12,7 @@ echo "Install tools"
 sudo apt install -y --no-install-recommends build-essential apt-transport-https ca-certificates curl software-properties-common htop dialog
 
 echo "Install minimal xserver"
-# Install x server before Nvidia driver to allow detection of Xorg locations.
+# Install x server before Nvidia driver to allow detection of xorg directory.
 sudo apt install -y --no-install-recommends xorg xserver-xorg-legacy #xserver-xorg-video-dummy
 
 # Disable nouveau driver
@@ -37,7 +37,7 @@ if [ ! "$(which nvidia-settings)" ]; then
     clear
     if [ ${answer} -eq 0 ]; then
         echo "Download Nvidia driver"
-        wget -O nvidia.run http://us.download.nvidia.com/XFree86/Linux-x86_64/390.48/NVIDIA-Linux-x86_64-390.48.run
+        wget -O nvidia.run http://us.download.nvidia.com/XFree86/Linux-x86_64/390.59/NVIDIA-Linux-x86_64-390.59.run
         echo "Install Nvidia driver"
         chmod +x nvidia.run
         ./nvidia.run

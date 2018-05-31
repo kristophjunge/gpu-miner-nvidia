@@ -5,12 +5,12 @@ services:
     image: kristophjunge/ewbf
     restart: unless-stopped
     environment:
-      STARTUP_DELAY: "${EWBF_STARTUP_DELAY}"
-      SERVER: "${EWBF_SERVER}"
-      ADDRESS: "${EWBF_ADDRESS}"
+      STARTUP_DELAY: "${ZEC_STARTUP_DELAY}"
+      SERVER: "${ZEC_POOL_HOST}"
+      ADDRESS: "${ZEC_WALLET}"
       WORKER: "${GPUMINERNVIDIA_NAME}"
-      PASS: "${EWBF_PASS}"
-      PORT: "${EWBF_PORT}"
+      PASS: "${ZEC_POOL_PASSWORD}"
+      PORT: "${ZEC_POOL_PORT}"
     volumes:
       - "/var/log/gpu-miner-nvidia/ewbf.log:/var/log/ewbf.log"
   prometheus_ewbf:

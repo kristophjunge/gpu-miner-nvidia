@@ -1,0 +1,24 @@
+version: '3'
+services:
+  xmrstak:
+    container_name: xmrstak
+    image: kristophjunge/xmrstak-cuda
+    environment:
+      MINER_ID: ${GPUMINERNVIDIA_NAME}
+      STARTUP_DELAY: ${MSR_STARTUP_DELAY}
+      STRATUM: ${MSR_POOL_URL}
+      WALLET: ${MSR_WALLET}
+      PASSWORD: ${MSR_PASSWORD}
+      CURRENCY: masari
+      THREADS: ${MSR_THREADS}
+      BLOCKS: ${MSR_BLOCKS}
+  prometheus_xmrstak:
+    container_name: prometheus_xmrstak
+    image: kristophjunge/prometheus-xmrstak
+    restart: unless-stopped
+    environment:
+      TEST_MODE: 0
+      API_URL: http://xmrstak:8080/api.json
+      MINER_ID: ${GPUMINERNVIDIA_NAME}
+    ports:
+      - "9207:9207"

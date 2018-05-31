@@ -4,7 +4,7 @@
 
 ![Nvidia](https://raw.githubusercontent.com/kristophjunge/gpu-miner-nvidia/master/nvidia_logo.png)
 
-Nvidia GPU mining setup for [Ubuntu Server](https://www.ubuntu.com/). Docker based using [nvidia-docker](https://github.com/NVIDIA/nvidia-docker). Supports ETH, ZEC and DCR mining.
+Nvidia GPU mining setup for [Ubuntu Server](https://www.ubuntu.com/). Docker based using [nvidia-docker](https://github.com/NVIDIA/nvidia-docker). Supports ETH, ZEC, DCR, MSR mining.
 
 Mining is causing environmental issues and will possibly not go away soon. Iam sharing this setup for easy to use energy efficient GPU mining from the software side.
 
@@ -33,6 +33,7 @@ Mining is causing environmental issues and will possibly not go away soon. Iam s
 - [Improved version](https://github.com/ethereum-mining/ethminer) of Genoils Cuda Miner for ETH mining.
 - [EWBF Miner](https://github.com/nanopool/ewbf-miner) for ZEC mining.
 - [Gominer](https://github.com/decred/gominer) for DCR mining.
+- [XMR-Stak](https://github.com/fireice-uk/xmr-stak) for MSR mining.
 - Overclocking. Prepackaged with overclocking profiles for GTX1070.
 - [Prometheus](https://prometheus.io/) exporters for system, GPU and mining metrics.
 - CLI installation script.
@@ -54,9 +55,11 @@ This project orchestrates the following docker containers:
 - [kristophjunge/ethminer-cuda](https://hub.docker.com/r/kristophjunge/ethminer-cuda/)
 - [kristophjunge/ewbf](https://hub.docker.com/r/kristophjunge/ewbf/)
 - [kristophjunge/decred-gominer-cuda](https://hub.docker.com/r/kristophjunge/decred-gominer-cuda/)
+- [kristophjunge/xmrstak-cuda](https://hub.docker.com/r/kristophjunge/xmrstak-cuda/)
 - [kristophjunge/prometheus-nvidiasmi](https://hub.docker.com/r/kristophjunge/prometheus-nvidiasmi/)
 - [kristophjunge/prometheus-ethminer](https://hub.docker.com/r/kristophjunge/prometheus-ethminer/)
 - [kristophjunge/prometheus-ewbf](https://hub.docker.com/r/kristophjunge/prometheus-ewbf/)
+- [kristophjunge/prometheus-xmrstak](https://hub.docker.com/r/kristophjunge/prometheus-xmrstak/)
 
 
 ## Prerequisites

@@ -5,10 +5,10 @@ services:
     image: kristophjunge/decred-gominer-cuda
     restart: unless-stopped
     environment:
-      STARTUP_DELAY: "${GOMINER_STARTUP_DELAY}"
-      POOL: "${GOMINER_POOL}"
-      POOLUSER: "${GOMINER_POOLUSER}.${GPUMINERNVIDIA_NAME}"
-      POOLPASS: "${GOMINER_POOLPASS}"
-      INTENSITY: "${GOMINER_INTENSITY}"
+      STARTUP_DELAY: "${DCR_STARTUP_DELAY}"
+      POOL: "${DCR_POOL_URL}"
+      POOLUSER: "${DCR_POOL_USER}.${GPUMINERNVIDIA_NAME}"
+      POOLPASS: "${DCR_POOL_PASSWORD}"
+      INTENSITY: "${DCR_INTENSITY}"
     volumes:
       - "/var/log/gpu-miner-nvidia/gominer:/var/log/gominer"
