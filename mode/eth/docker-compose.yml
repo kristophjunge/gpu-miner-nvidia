@@ -9,8 +9,6 @@ services:
       USERPASS: "${ETH_WALLET}.${GPUMINERNVIDIA_NAME}"
       STRATUM: "${ETH_POOL_URL}"
       FAILOVER_STRATUM: "${ETH_POOL_FAILOVER_URL}"
-    volumes:
-      - "/var/log/gpu-miner-nvidia/ethminer.log:/var/log/ethminer.log"
   prometheus_ethminer:
     container_name: prometheus_ethminer
     image: kristophjunge/prometheus-ethminer

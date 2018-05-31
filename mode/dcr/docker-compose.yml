@@ -10,5 +10,3 @@ services:
       POOLUSER: "${DCR_POOL_USER}.${GPUMINERNVIDIA_NAME}"
       POOLPASS: "${DCR_POOL_PASSWORD}"
       INTENSITY: "${DCR_INTENSITY}"
-    volumes:
-      - "/var/log/gpu-miner-nvidia/gominer:/var/log/gominer"

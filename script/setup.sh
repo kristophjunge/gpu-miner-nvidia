@@ -108,10 +108,7 @@ docker run --rm nvidia/cuda nvidia-smi
 
 echo "Setup log files"
 sudo mkdir -p /var/log/gpu-miner-nvidia/gominer
-sudo touch /var/log/gpu-miner-nvidia/gpu-miner-nvidia.log \
-    /var/log/gpu-miner-nvidia/ethminer.log \
-    /var/log/gpu-miner-nvidia/ewbf.log \
-    /var/log/gpu-miner-nvidia/gominer/gominer.log
+sudo touch /var/log/gpu-miner-nvidia/gpu-miner-nvidia.log
 
 echo "Install cronjobs"
 crontab ${SCRIPT_DIR}/../root.crontab

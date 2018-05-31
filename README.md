@@ -134,14 +134,9 @@ Shutdown:
 
 ## Logs
 
-All logs are located under `/var/log/gpu-miner-nividia`.
+The main service writes its log to `gpu-miner-nvidia.log`.
 
-- The main service writes its log to `gpu-miner-nvidia.log`.
-- Genoils Cuda Miner writes its log to `ethminer.log`.
-- EWBF Miner writes its log to `ewbf.log`.
-- Gominer writes its log to `gominer/gominer.log`.
-
-Apart from the log files all docker containers have their own log output.
+All other containers have their own log output.
 
 
 ## Limitations And Known Issues

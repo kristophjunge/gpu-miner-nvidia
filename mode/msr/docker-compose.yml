@@ -3,6 +3,7 @@ services:
   xmrstak:
     container_name: xmrstak
     image: kristophjunge/xmrstak-cuda
+    tty: true # docker-compose up hangs without
     environment:
       MINER_ID: ${GPUMINERNVIDIA_NAME}
       STARTUP_DELAY: ${MSR_STARTUP_DELAY}

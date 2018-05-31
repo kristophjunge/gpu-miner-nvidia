@@ -72,6 +72,8 @@ docker run --rm nvidia/cuda nvidia-smi
 echo "`date` Waiting ${GPUMINERNVIDIA_STARTUP_DELAY}s before starting"
 sleep ${GPUMINERNVIDIA_STARTUP_DELAY}
 
+echo "`date` Starting"
+
 # Start docker-compose
 cd ${SCRIPT_DIR}/../
 if [ -z "${GPUMINERNVIDIA_MODE}" ]; then
@@ -79,5 +81,3 @@ if [ -z "${GPUMINERNVIDIA_MODE}" ]; then
 else
     docker-compose -f ${SCRIPT_DIR}/../docker-compose.yml -f ${SCRIPT_DIR}/../mode/${GPUMINERNVIDIA_MODE}/docker-compose.yml up --build --force-recreate --remove-orphans
 fi
-
-echo "`date` Started"

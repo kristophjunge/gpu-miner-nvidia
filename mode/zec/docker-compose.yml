@@ -11,8 +11,6 @@ services:
       WORKER: "${GPUMINERNVIDIA_NAME}"
       PASS: "${ZEC_POOL_PASSWORD}"
       PORT: "${ZEC_POOL_PORT}"
-    volumes:
-      - "/var/log/gpu-miner-nvidia/ewbf.log:/var/log/ewbf.log"
   prometheus_ewbf:
     container_name: prometheus_ewbf
     image: kristophjunge/prometheus-ewbf
