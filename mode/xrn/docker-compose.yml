@@ -6,13 +6,15 @@ services:
     tty: true # docker-compose up hangs without
     environment:
       MINER_ID: ${GPUMINERNVIDIA_NAME}
-      STARTUP_DELAY: ${MSR_STARTUP_DELAY}
-      STRATUM: ${MSR_POOL_URL}
-      WALLET: ${MSR_WALLET}
-      PASSWORD: ${MSR_PASSWORD}
-      CURRENCY: masari
-      THREADS: ${MSR_THREADS}
-      BLOCKS: ${MSR_BLOCKS}
+      STARTUP_DELAY: ${XRN_STARTUP_DELAY}
+      STRATUM: ${XRN_POOL_URL}
+      WALLET: ${XRN_WALLET}
+      PASSWORD: ${XRN_PASSWORD}
+      CURRENCY: cryptonight_heavy
+      THREADS: ${XRN_THREADS}
+      BLOCKS: ${XRN_BLOCKS}
+      BFACTOR: ${XRN_BFACTOR}
+      BSLEEP: ${XRN_BSLEEP}
   prometheus_xmrstak:
     container_name: prometheus_xmrstak
     image: kristophjunge/prometheus-xmrstak

@@ -9,6 +9,8 @@ services:
       USERPASS: "${ETH_WALLET}.${GPUMINERNVIDIA_NAME}"
       STRATUM: "${ETH_POOL_URL}"
       FAILOVER_STRATUM: "${ETH_POOL_FAILOVER_URL}"
+    ports:
+      - "3333:3333"
   prometheus_ethminer:
     container_name: prometheus_ethminer
     image: kristophjunge/prometheus-ethminer

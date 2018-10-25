@@ -14,7 +14,7 @@ echo "`date` Starting in mode '${GPUMINERNVIDIA_MODE}'"
 
 # GPU Setup
 
-export DISPLAY=:0
+export DISPLAY=":${GPUMINERNVIDIA_DISPLAY}"
 export XAUTHORITY=~/.Xauthority
 export LC_ALL="en_US.utf-8"
 

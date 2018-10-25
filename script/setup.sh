@@ -37,7 +37,7 @@ if [ ! "$(which nvidia-settings)" ]; then
     clear
     if [ ${answer} -eq 0 ]; then
         echo "Download Nvidia driver"
-        wget -O nvidia.run http://us.download.nvidia.com/XFree86/Linux-x86_64/390.59/NVIDIA-Linux-x86_64-390.59.run
+        wget -O nvidia.run http://us.download.nvidia.com/XFree86/Linux-x86_64/390.67/NVIDIA-Linux-x86_64-390.67.run
         echo "Install Nvidia driver"
         chmod +x nvidia.run
         ./nvidia.run
@@ -59,10 +59,28 @@ echo "Remove previous docker installations"
 sudo apt remove --purge -y docker docker-engine docker.io
 
 echo "Install docker"
-# Install ubuntu version to be compatible with nvidia-docker
-sudo apt install -y --no-install-recommends docker.io
+## Install ubuntu version to be compatible with nvidia-docker
+#sudo apt install -y --no-install-recommends docker.io
+
+sudo apt-get update
+sudo apt-get install \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    software-properties-common
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo apt-key fingerprint 0EBFCD88
+sudo add-apt-repository \
+   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+   $(lsb_release -cs) \
+   stable"
+sudo apt-get update
+sudo apt-get install docker-ce
+
 sudo systemctl enable docker
 sudo systemctl start docker
+
+
 
 echo "Install docker-compose"
 sudo curl -L https://github.com/docker/compose/releases/download/1.21.0/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
